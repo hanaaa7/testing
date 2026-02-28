@@ -1,0 +1,41 @@
+import tkinter as tk
+import sqlite3
+
+conn = sqlite3.connect("data.db")
+c = conn.cursor()
+
+c.execute("""
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY,
+    nama TEXT,
+    jurusan TEXT
+)
+""")
+
+def simpan():
+    n = nama.get()
+    j = jurusan.get()
+
+    c.execute("INSERT INTO user VALUES (NULL, ?, ?)", (n, j))
+    conn.commit()
+
+    status.config(text="Data tersimpan!")
+
+app = tk.Tk()
+app.title("Data Mahasiswa")
+app.geometry("400x300")
+
+tk.Label(app, text="Nama").pack()
+nama = tk.Entry(app)
+nama.pack()
+
+tk.Label(app, text="Jurusan").pack()
+jurusan = tk.Entry(app)
+jurusan.pack()
+
+tk.Button(app, text="Simpan", command=simpan).pack(pady=10)
+
+status = tk.Label(app, text="")
+status.pack()
+
+app.mainloop()
